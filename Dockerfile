@@ -19,7 +19,7 @@ RUN npm test
 FROM node:20-alpine AS production
 
 # Metadatos OCI estándar
-LABEL maintainer="Juan Andrés Covili Cabezas <juan.covili@hotmail.com>"
+LABEL maintainer="Juan Covili"
 LABEL org.opencontainers.image.title="docker-inventory-microservice"
 LABEL org.opencontainers.image.description="Microservicio REST de Control de Inventario FIFO con Dockerfile Multi-Stage"
 LABEL org.opencontainers.image.version="1.0.0"
