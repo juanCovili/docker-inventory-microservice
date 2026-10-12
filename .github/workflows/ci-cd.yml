@@ -1,0 +1,34 @@
+name: Docker CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test-and-build:
+    name: Run Unit Tests & Build Multi-Stage Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Execute Automated FIFO Unit Tests
+        run: npm test
+
+      - name: Build Production Docker Image
+        run: docker build -t inventory-fifo-microservice:latest .
+
+      - name: Verify Container Healthcheck
+        run: |
+          docker run -d --name test-container -p 8080:8080 inventory-fifo-microservice:latest
+          sleep 3
+          curl --fail http://localhost:8080/api/health
+          docker stop test-container

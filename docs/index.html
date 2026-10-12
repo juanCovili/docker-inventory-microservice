@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker Inventory & FIFO Microservice — Consola Interactiva</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --docker: #0ea5e9;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    body { background: var(--bg); color: var(--text); line-height: 1.5; padding-bottom: 3rem; }
+    header {
+      background: linear-gradient(90deg, #0c4a6e 0%, #1e293b 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .title-group h1 { font-size: 1.3rem; display: flex; align-items: center; gap: 0.6rem; }
+    .title-group p { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; }
+    .status-pill {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid var(--ok);
+      color: #86efac;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .container { max-width: 1200px; margin: 1.5rem auto; padding: 0 1.5rem; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .kpi { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem; }
+    .kpi span { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .kpi strong { display: block; font-size: 1.65rem; margin-top: 0.35rem; color: var(--docker); }
+    .main-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; }
+    @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.25rem; }
+    .card h2 { font-size: 1.05rem; margin-bottom: 0.9rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; color: #e2e8f0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    th, td { text-align: left; padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; }
+    .badge { padding: 0.2rem 0.55rem; border-radius: 5px; font-size: 0.73rem; font-weight: 700; }
+    .badge.ok { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .badge.crit { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    .form-row { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.85rem; }
+    label { font-size: 0.82rem; color: var(--muted); }
+    select, input {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.55rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    button {
+      background: var(--docker);
+      color: #fff;
+      border: none;
+      padding: 0.65rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.9; }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      max-height: 280px;
+    }
+    .batch-chip {
+      display: inline-block;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.15rem 0.45rem;
+      font-size: 0.73rem;
+      margin-right: 0.3rem;
+      margin-top: 0.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title-group">
+      <h1>🐳 Docker Inventory & FIFO Microservice</h1>
+      <p>Multi-Stage Dockerfile (node:20-alpine) · Rotación FIFO por Lotes · Healthcheck & CI/CD</p>
+    </div>
+    <div class="status-pill">● CONTAINER HEALTH: HEALTHY (PORT 8080)</div>
+  </header>
+
+  <div class="container">
+    <div class="kpi-grid">
+      <div class="kpi">
+        <span>SKUs Monitoreados</span>
+        <strong id="kpi-skus">4</strong>
+      </div>
+      <div class="kpi">
+        <span>Unidades Totales en Bodega</span>
+        <strong id="kpi-units">143</strong>
+      </div>
+      <div class="kpi">
+        <span>Valorización Costo (CLP)</span>
+        <strong id="kpi-value">$202.050</strong>
+      </div>
+      <div class="kpi">
+        <span>Alertas de Quiebre (Bajo Mínimo)</span>
+        <strong id="kpi-alerts" style="color: var(--danger);">2</strong>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div>
+        <div class="card">
+          <h2>📦 Estado de Inventario y Lotes Activos (Orden FIFO)</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>SKU / Producto</th>
+                <th>Lotes Activos (Ingreso → Cantidad)</th>
+                <th>Stock Total</th>
+                <th>Mínimo</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h2>🐳 Arquitectura Multi-Stage del Contenedor (`Dockerfile`)</h2>
+          <pre>
+Stage 1 [tester]     FROM node:20-alpine AS tester
+                     RUN npm test  (3/3 pruebas FIFO aprobadas)
+                              │
+                              ▼
+Stage 2 [production] FROM node:20-alpine AS production
+                     USER node     (Seguridad DevSecOps sin root)
+                     HEALTHCHECK   GET http://localhost:8080/api/health
+                     EXPOSE 8080   CMD ["node", "src/server.js"]</pre>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>⚡ Simulador de Extracción por Lotes (Algoritmo FIFO)</h2>
+          <div class="form-row">
+            <label for="sku-select">Seleccionar Producto (SKU)</label>
+            <select id="sku-select"></select>
+          </div>
+          <div class="form-row">
+            <label for="qty-input">Cantidad a Despachar / Consumir</label>
+            <input type="number" id="qty-input" value="15" min="1" max="100" />
+          </div>
+          <button onclick="simulateFifo()">Ejecutar POST /api/inventory/consume-fifo</button>
+        </div>
+
+        <div class="card">
+          <h2>📡 Respuesta JSON del Microservicio</h2>
+          <pre id="json-output">// Haz clic en "Ejecutar POST /api/inventory/consume-fifo" para descontar de los lotes más antiguos primero.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const state = [
+      {
+        sku: "SKU-LAC-001",
+        name: "Leche Entera 1L (Refrigerado)",
+        unitCost: 950,
+        minStock: 40,
+        batches: [
+          { batchId: "LOTE-2026-01", quantity: 25, entryDate: "2026-10-01" },
+          { batchId: "LOTE-2026-02", quantity: 50, entryDate: "2026-10-08" }
+        ]
+      },
+      {
+        sku: "SKU-ABA-002",
+        name: "Aceite Vegetal 900ml",
+        unitCost: 1450,
+        minStock: 30,
+        batches: [
+          { batchId: "LOTE-2026-03", quantity: 18, entryDate: "2026-09-15" }
+        ]
+      },
+      {
+        sku: "SKU-FAR-003",
+        name: "Suero Fisiológico 500ml",
+        unitCost: 1200,
+        minStock: 25,
+        batches: [
+          { batchId: "LOTE-2026-04", quantity: 12, entryDate: "2026-09-01" },
+          { batchId: "LOTE-2026-05", quantity: 30, entryDate: "2026-10-02" }
+        ]
+      },
+      {
+        sku: "SKU-LOG-004",
+        name: "Film Stretch Embalaje Pallet 50cm",
+        unitCost: 6800,
+        minStock: 15,
+        batches: [
+          { batchId: "LOTE-2026-06", quantity: 8, entryDate: "2026-09-20" }
+        ]
+      }
+    ];
+
+    function render() {
+      const tbody = document.getElementById("inventory-tbody");
+      const select = document.getElementById("sku-select");
+      const currentSelected = select.value;
+      tbody.innerHTML = "";
+      select.innerHTML = "";
+
+      let totalUnits = 0;
+      let totalValue = 0;
+      let alerts = 0;
+
+      state.forEach((item) => {
+        const stock = item.batches.reduce((s, b) => s + b.quantity, 0);
+        totalUnits += stock;
+        totalValue += stock * item.unitCost;
+        const isCrit = stock < item.minStock;
+        if (isCrit) alerts++;
+
+        const batchesHtml = item.batches.length
+          ? item.batches.map(b => `<span class="batch-chip"><b>${b.batchId}</b> (${b.entryDate}): ${b.quantity} uds</span>`).join("")
+          : `<span class="batch-chip" style="color:#f87171">Sin lotes disponibles</span>`;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><b>${item.sku}</b><br><span style="color:#94a3b8;font-size:0.78rem">${item.name}</span></td>
+          <td>${batchesHtml}</td>
+          <td><b>${stock}</b></td>
+          <td>${item.minStock}</td>
+          <td><span class="badge ${isCrit ? 'crit' : 'ok'}">${isCrit ? 'STOCK CRÍTICO' : 'ÓPTIMO'}</span></td>
+        `;
+        tbody.appendChild(tr);
+
+        const opt = document.createElement("option");
+        opt.value = item.sku;
+        opt.textContent = `${item.sku} — ${item.name} (${stock} disp.)`;
+        select.appendChild(opt);
+      });
+
+      if (currentSelected) select.value = currentSelected;
+      document.getElementById("kpi-units").textContent = totalUnits;
+      document.getElementById("kpi-value").textContent = "$" + totalValue.toLocaleString("es-CL");
+      document.getElementById("kpi-alerts").textContent = alerts;
+    }
+
+    function simulateFifo() {
+      const sku = document.getElementById("sku-select").value;
+      const qty = parseInt(document.getElementById("qty-input").value, 10);
+      const item = state.find(i => i.sku === sku);
+      const output = document.getElementById("json-output");
+
+      const available = item.batches.reduce((s, b) => s + b.quantity, 0);
+      if (!qty || qty <= 0 || qty > available) {
+        output.textContent = JSON.stringify({
+          status: 400,
+          error: "Stock insuficiente o cantidad inválida",
+          sku,
+          available,
+          requested: qty
+        }, null, 2);
+        return;
+      }
+
+      let rem = qty;
+      const affected = [];
+      for (const b of item.batches) {
+        if (rem === 0) break;
+        const take = Math.min(b.quantity, rem);
+        b.quantity -= take;
+        rem -= take;
+        affected.push({ batchId: b.batchId, deducted: take, remainingInBatch: b.quantity });
+      }
+      item.batches = item.batches.filter(b => b.quantity > 0);
+
+      output.textContent = JSON.stringify({
+        status: 200,
+        endpoint: "POST /api/inventory/consume-fifo",
+        container: "inventory-fifo-service (node:20-alpine)",
+        sku,
+        quantityConsumed: qty,
+        fifoBatchesDeducted: affected,
+        newTotalStock: item.batches.reduce((s, b) => s + b.quantity, 0)
+      }, null, 2);
+
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>

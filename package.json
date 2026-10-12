@@ -1,0 +1,15 @@
+{
+  "name": "docker-inventory-microservice",
+  "version": "1.0.0",
+  "description": "Microservicio REST de Control de Inventario, Lotes FIFO y Alertas de Stock contenerizado con Docker Multi-Stage",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test tests/inventory.test.js"
+  },
+  "author": "Juan Andrés Covili Cabezas <juan.covili@hotmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
