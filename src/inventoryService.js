@@ -1,6 +1,6 @@
 /**
  * Servicio de Dominio: Gestión de Inventario, Rotación FIFO y Alertas de Stock Crítico.
- * Autor: Juan Andrés Covili Cabezas
+ * Autor: Juan Covili
  *
  * Implementa lógica real de bodega y operaciones:
  * 1. Descuento automático por lotes según fecha de vencimiento/ingreso (FIFO / FEFO).
