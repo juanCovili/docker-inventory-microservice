@@ -7,7 +7,7 @@
     "start": "node src/server.js",
     "test": "node --test tests/inventory.test.js"
   },
-  "author": "Juan Andrés Covili Cabezas <juan.covili@hotmail.com>",
+  "author": "Juan Covili",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
