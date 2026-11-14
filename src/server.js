@@ -1,4 +1,11 @@
 /**
+ * @project   Dockerized Inventory FIFO Microservice
+ * @author    Juan Covili <https://github.com/juanCovili>
+ * @repo      https://github.com/juanCovili/docker-inventory-microservice
+ * @portfolio https://juancovili.com
+ * @copyright Copyright (c) 2026 Juan Covili. Todos los derechos reservados.
+ */
+/**
  * Servidor HTTP REST para el Microservicio Contenerizado de Inventario.
  * Expone endpoints JSON, Healthcheck para Docker/Kubernetes y Dashboard interactivo.
  */
@@ -19,7 +26,8 @@ function sendJson(res, statusCode, payload) {
     "Content-Type": "application/json; charset=utf-8",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type"
+    "Access-Control-Allow-Headers": "Content-Type",
+    "X-Author": "Juan Covili (https://github.com/juanCovili)"
   });
   res.end(JSON.stringify(payload, null, 2));
 }
@@ -29,7 +37,8 @@ const server = http.createServer((req, res) => {
     res.writeHead(204, {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type"
+      "Access-Control-Allow-Headers": "Content-Type",
+      "X-Author": "Juan Covili (https://github.com/juanCovili)"
     });
     return res.end();
   }
@@ -96,7 +105,7 @@ const server = http.createServer((req, res) => {
   if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) {
     const htmlPath = path.join(__dirname, "..", "docs", "index.html");
     if (fs.existsSync(htmlPath)) {
-      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "X-Author": "Juan Covili (https://github.com/juanCovili)" });
       return res.end(fs.readFileSync(htmlPath, "utf-8"));
     }
   }

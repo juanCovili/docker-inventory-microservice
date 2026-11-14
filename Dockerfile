@@ -1,3 +1,8 @@
+# @project   Dockerized Inventory FIFO Microservice
+# @author    Juan Covili <https://github.com/juanCovili>
+# @repo      https://github.com/juanCovili/docker-inventory-microservice
+# @portfolio https://juancovili.com
+# @copyright Copyright (c) 2026 Juan Covili. Todos los derechos reservados.
 # ==============================================================================
 # ETAPA 1: Validación y Pruebas Automatizadas (Builder / Tester Stage)
 # ==============================================================================
@@ -23,6 +28,9 @@ LABEL maintainer="Juan Covili"
 LABEL org.opencontainers.image.title="docker-inventory-microservice"
 LABEL org.opencontainers.image.description="Microservicio REST de Control de Inventario FIFO con Dockerfile Multi-Stage"
 LABEL org.opencontainers.image.version="1.0.0"
+LABEL org.opencontainers.image.authors="Juan Covili <https://github.com/juanCovili>"
+LABEL org.opencontainers.image.url="https://juancovili.com"
+LABEL org.opencontainers.image.source="https://github.com/juanCovili/docker-inventory-microservice"
 
 # Variables de entorno por defecto
 ENV NODE_ENV=production

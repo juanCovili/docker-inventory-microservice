@@ -1,3 +1,10 @@
+/**
+ * @project   Dockerized Inventory FIFO Microservice
+ * @author    Juan Covili <https://github.com/juanCovili>
+ * @repo      https://github.com/juanCovili/docker-inventory-microservice
+ * @portfolio https://juancovili.com
+ * @copyright Copyright (c) 2026 Juan Covili. Todos los derechos reservados.
+ */
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { InventoryService } = require("../src/inventoryService");

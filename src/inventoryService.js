@@ -1,4 +1,11 @@
 /**
+ * @project   Dockerized Inventory FIFO Microservice
+ * @author    Juan Covili <https://github.com/juanCovili>
+ * @repo      https://github.com/juanCovili/docker-inventory-microservice
+ * @portfolio https://juancovili.com
+ * @copyright Copyright (c) 2026 Juan Covili. Todos los derechos reservados.
+ */
+/**
  * Servicio de Dominio: Gestión de Inventario, Rotación FIFO y Alertas de Stock Crítico.
  * Autor: Juan Covili
  *

@@ -1,0 +1,39 @@
+Copyright (c) 2026 Juan Covili
+Repositorio / Repository: https://github.com/juanCovili/docker-inventory-microservice
+Autor / Author: Juan Covili (https://github.com/juanCovili | https://juancovili.com)
+Proyecto / Project: Dockerized Inventory FIFO Microservice
+
+================================================================================
+LICENCIA DE EVALUACION TECNICA Y ATRIBUCION OBLIGATORIA (ES)
+================================================================================
+Este repositorio y su codigo fuente son publicados por Juan Covili con fines de
+portafolio profesional, evaluacion tecnica por reclutadores y revision educativa.
+
+Se autoriza ver, clonar y ejecutar este proyecto localmente unicamente para
+evaluacion tecnica o aprendizaje personal, sujeto a las siguientes condiciones:
+
+1. ATRIBUCION OBLIGATORIA: Cualquier cita, referencia, ejecucion o demostracion
+   debe acreditar de forma visible al autor original: Juan Covili
+   (https://github.com/juanCovili y https://juancovili.com).
+2. INTEGRIDAD DE MARCAS DE AUTORIA: Queda estrictamente prohibido eliminar,
+   ocultar o alterar este archivo LICENSE, las cabeceras de copyright en el
+   codigo fuente o las marcas tecnicas de autoria (X-Author, __author__, metadatos).
+3. PROHIBICION DE PLAGIO Y USO COMERCIAL NO AUTORIZADO: Queda prohibido
+   presentar este codigo, su arquitectura o sus interfaces como autoria propia,
+   asi como redistribuirlo o comercializarlo sin autorizacion escrita de Juan Covili.
+
+================================================================================
+PORTFOLIO EVALUATION & MANDATORY ATTRIBUTION LICENSE (EN)
+================================================================================
+Copyright (c) 2026 Juan Covili. All rights reserved.
+
+Permission is hereby granted to view, clone, and run this software solely for
+technical evaluation, recruitment assessment, and personal educational study,
+provided that:
+
+1. Attribution to Juan Covili (https://github.com/juanCovili | https://juancovili.com)
+   is clearly preserved in all copies and references.
+2. This LICENSE file, source code copyright headers, and technical authorship
+   markers (X-Author, __author__, metadata tags) remain intact.
+3. Claiming authorship, stripping attribution, or commercial redistribution
+   without prior written consent from Juan Covili is strictly prohibited.

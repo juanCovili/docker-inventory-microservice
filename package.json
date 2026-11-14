@@ -7,9 +7,14 @@
     "start": "node src/server.js",
     "test": "node --test tests/inventory.test.js"
   },
-  "author": "Juan Covili",
-  "license": "MIT",
+  "author": "Juan Covili <https://juancovili.com> (https://github.com/juanCovili)",
+  "license": "SEE LICENSE IN LICENSE",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "homepage": "https://juancovili.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juanCovili/docker-inventory-microservice.git"
   }
 }

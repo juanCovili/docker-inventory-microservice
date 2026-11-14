@@ -90,3 +90,12 @@ curl http://localhost:8080/api/health
 **Juan Covili**  
 *Ingeniero en Informática / Analista Programador (INACAP)*  
 * [LinkedIn](https://www.linkedin.com/in/juan-covili-59b935241/) · [GitHub](https://github.com/juanCovili) · [Portafolio Web](https://www.juancovili.com)
+
+---
+
+## Autor y Copyright
+
+**Juan Covili** — Copyright (c) 2026 Juan Covili  
+- **GitHub:** [github.com/juanCovili/docker-inventory-microservice](https://github.com/juanCovili/docker-inventory-microservice)  
+- **Portafolio:** [juancovili.com](https://juancovili.com)  
+- **Licencia:** Ver [`LICENSE`](./LICENSE) (disponible para evaluación técnica y revisión de portafolio con atribución obligatoria a Juan Covili; prohibido eliminar marcas de autoría o reclamar autoría).
